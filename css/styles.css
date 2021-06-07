@@ -10833,7 +10833,7 @@ html {
 }
 
 .bg-gradient-primary-to-secondary {
-  background: linear-gradient(45deg, #000000, #393939) !important;
+  background: linear-gradient(45deg, #000, #393939) !important;
 }
 
 .font-alt {
