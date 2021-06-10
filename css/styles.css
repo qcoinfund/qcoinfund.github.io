@@ -7351,7 +7351,7 @@ textarea.form-control-lg {
   color: #f8f9fa !important;
 }
 
-.text-dark {
+.text-dark, .text-dark a {
   color: #212529 !important;
 }
 
