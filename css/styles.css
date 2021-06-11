@@ -11189,3 +11189,10 @@ footer a:hover, footer a:active, footer a:focus {
   color: #dc0000;
   padding: 5rem;
 }
+
+.herolist .list-group-item
+{
+	background: none;
+	color: #fff !important;
+	border: 0;
+}
