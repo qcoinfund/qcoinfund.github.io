@@ -11196,3 +11196,8 @@ footer a:hover, footer a:active, footer a:focus {
 	color: #fff !important;
 	border: 0;
 }
+
+.plan-icons img
+{
+	max-width: 50%;
+}
