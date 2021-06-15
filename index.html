@@ -18,7 +18,7 @@
         <link href="css/styles.css" rel="stylesheet" />
     </head>
     <body id="page-top" style="background-color: #000;">
-        <header class="masthead video-container" id="about">
+        <header class="video-container" id="about">
 			<video autoplay muted loop id="vid">
   				<source src="assets/img/hero_vid.webm" type="video/webm">
 			</video>        
@@ -36,10 +36,10 @@
                 </div>
 				<div class="row">
 					<div class="col-auto">
-						<input class="form-control" type="password" name="password" id="enter_password" placeholder="Password"/>
+					<div class="input-group mb-3">
+						<input class="form-control form-control-lg" type="password" name="password" id="enter_password" placeholder="Password"/>
+						<button class="btn btn-outline-light py-2 px-4" id="password_button">Enter Private Sale</button>
 					</div>
-					<div class="col-auto">
-						<button class="btn btn-outline-light py-3 px-4 rounded-pill" id="password_button">Enter Private Sale</button>
 					</div>
 				</div>
             </div>
