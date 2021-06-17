@@ -69,16 +69,22 @@ async function addCustomToken() {
 
 const ethEnabled = async () => {
 	if (window.ethereum) {
-	  await window.ethereum.send('eth_requestAccounts');
-	  window.web3 = new Web3(window.ethereum);
-	  return true;
+		await window.ethereum.send('eth_requestAccounts');
+		window.web3 = new Web3(window.ethereum);
+		return true;
 	}
+	
 	return false;
-  }
+}
 
 const connectButton = document.getElementById('connectweb3');
 if (connectButton)
 	connectButton.addEventListener('click', connect);
+
+const addTokenButton = document.getElementById('addCustomToken');
+addTokenButton.addEventListener('click', () => {
+	addCustomToken();
+});
 
 async function connect() {
 	/*
