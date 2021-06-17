@@ -13,6 +13,8 @@ async function startApp(selectedAddress)
 	// check that they are on the network and display appropriate message.
 	checkNetwork();
 
+	if (selectedAddress != null)
+		setupAccount(selectedAddress);
 	//const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);
 }
 
@@ -91,15 +93,22 @@ async function connect() {
         console.error(error);
       }
     });*/
-	const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-	const account = accounts[0];
-	setupAccount(account);
+	console.log("connect button clicked");
+	try {
+		const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+		const account = accounts[0];
+		setupAccount(account);
+	}
+	catch(err) {
+		console.log("Error with connecting to metamask.");
+	}
 }
 
 function setupAccount(account) {
 	connectButton.classList.add("btn-outline-primary");
 	connectButton.classList.remove("btn-primary");
-	connectButton.innerText = account.substring(0,4).concat("...").concat(account.substring(account.length-4));
+	const connectButtonText = connectButton.getElementById("connectweb3text");
+	connectButtonText.innerText = account.substring(0,4).concat("...").concat(account.substring(account.length-4));
 	connected(account);
 }
 
