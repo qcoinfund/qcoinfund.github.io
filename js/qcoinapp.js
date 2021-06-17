@@ -105,9 +105,10 @@ async function connect() {
 }
 
 function setupAccount(account) {
-	connectButton.classList.add("btn-outline-primary");
-	connectButton.classList.remove("btn-primary");
-	const connectButtonText = connectButton.getElementById("connectweb3text");
+	const connectButton = document.getElementById('connectweb3');
+	connectButton.classList.add("btn-success");
+	connectButton.classList.remove("btn-dark");
+	const connectButtonText = document.getElementById("connectweb3text");
 	connectButtonText.innerText = account.substring(0,4).concat("...").concat(account.substring(account.length-4));
 	connected(account);
 }
