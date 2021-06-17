@@ -74,7 +74,7 @@ const ethEnabled = async () => {
 	return false;
   }
 
-const connectButton = document.getElementById('connectButton');
+const connectButton = document.getElementById('connectweb3');
 if (connectButton)
 	connectButton.addEventListener('click', connect);
 
