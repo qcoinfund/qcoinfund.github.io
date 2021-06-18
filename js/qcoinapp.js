@@ -1,5 +1,7 @@
 const CHAIN_ID = 97; // TESTNET=97
-const TOKEN_CONTRACT_ADDR = '0x45EB209d2f758CF2Bc623578B0ADcb7e351eab77'; // TESTNET
+const TOKEN_CONTRACT_ADDR = '0x45EB209d2f758CF2Bc623578B0ADcb7e351eab77'; // TESTNET TOKEN CONTRACT
+const TOKEN_PRICE_LP = '0x6a34f03db48f6dfffad221edd5264123e875d97c'; // TESTNET LP
+
 const tokenSymbol = 'Q';
 const tokenDecimals = 9;
 const BURNWALLET = "0x000000000000000000000000000000000000dead";
@@ -788,6 +790,21 @@ async function startApp(selectedAddress)
 	const burnBalance = await tokenContract.methods.balanceOf(BURNWALLET).call();
 	let burnBalanceHR = addDecimalPlace(burnBalance,decimals); // human readable.
 	console.log("Burn balance: " + burnBalance + " human Readable: " + burnBalanceHR);
+
+  const totalSupply = await tokenContract.methods.totalSupply().call();
+  let totalSupplyHR = addDecimalPlace(totalSupply,decimals);
+  updateTokenFigures(burnBalanceHR, totalSupplyHR);
+}
+
+function updateTokenFigures(burnBalance, totalSupply)
+{
+  const burnArea = document.getElementById("burnedTokens");
+  if (burnArea)
+    burnArea.innerHTML = burnBalance+"";
+  
+  const totalSupplyArea = document.getElementById("totalSupply");
+  if (totalSupplyArea)
+    totalSupplyArea.innerHTML = totalSupply+"";
 }
 
 //TODO: fix this method up.
@@ -885,9 +902,11 @@ if (connectButton)
 	connectButton.addEventListener('click', connect);
 
 const addTokenButton = document.getElementById('addCustomToken');
-addTokenButton.addEventListener('click', () => {
-	addCustomToken();
-});
+if (addTokenButton) {
+  addTokenButton.addEventListener('click', () => {
+    addCustomToken();
+  });  
+}
 
 async function connect() {
 	/*
@@ -929,7 +948,42 @@ async function connected(account)
 
 function handleAccountsChanged()
 {
-	console.log("need to handle account that just changed.");
+  console.log("need to handle account that just changed.");
+}
+
+async function getTokenPrice() {  
+	const lpContract = new web3.eth.Contract(poolABI,TOKEN_PRICE_LP);
+	token0 = await lpContract.methods.token0().call();
+	token1 = await lpContract.methods.token1().call();
+
+	var token0Price = 0;
+	var token1Price = 0;
+
+	if (prices[token0])
+		token0Price = prices[token0].usd; // E.g. MATIC->USDC
+
+	if (prices[token1])
+		token1Price = prices[token1].usd; // E.g. 1 USDC worth of MATIC
+
+	var tokenPrice = 0;
+
+	if (token0Price == 0 && token1Price > 0)
+	{
+		console.log("need token0 price..");
+	}
+	else if (token0Price > 0 && token1Price == 0)
+	{
+		// need token1 price
+		reserves = await getReserves(lpContract);
+		const reserve0 = reserves[0];
+		const reserve1 = reserves[1];
+		var rate = reserve1/reserve0;
+		var altRate = reserve0/reserve1;
+		tokenPrice = altRate * (token0Price);
+		prices[TOKEN_CONTRACT_ADDR] = {usd: tokenPrice};
+	}
+
+	return tokenPrice;
 }
 
 window.addEventListener('load', function() {
