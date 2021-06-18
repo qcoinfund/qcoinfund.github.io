@@ -10,7 +10,6 @@ if (CHAIN_ID == 97)
 
 const tokenImage = 'https://qcoin.finance/assets/img/qcoin_logo.png'; // should be 512x512 I believe.
 
-
 const TOKEN_CONTRACT_ABI = [
     {
       "inputs": [],
@@ -805,8 +804,13 @@ function addDecimalPlace(numberAsString,decimals)
 function setupBuyButtons()
 {
 	const pcsLink = document.getElementById("pancakeBuyButton");
+  const pcsLink2 = document.getElementById("pancakeBuyButton1");
+
 	if (pcsLink)
 		pcsLink.href = pancakeSwapURL;
+
+  if (pcsLink2)
+	  pcsLink2.href = pancakeSwapURL;
 }
 
 function checkNetwork()
@@ -851,6 +855,7 @@ async function addCustomToken() {
 	}
 }
 
+/*
 const ethEnabled = async () => {
 	if (window.ethereum) {
 		await window.ethereum.send('eth_requestAccounts');
@@ -859,7 +864,7 @@ const ethEnabled = async () => {
 	}
 	
 	return false;
-}
+}*/
 
 const connectButton = document.getElementById('connectweb3');
 if (connectButton)
