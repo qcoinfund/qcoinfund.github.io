@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>QCoin - Frictionless and Yield-Generating Token on Binance Smart Chain</title>
+        
+		<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+		<link rel="shortcut icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+		<link rel="icon" type="image/x-icon" href="assets/favicon/favicon.ico" />
+		<link rel="manifest" href="assets/favicon/site.webmanifest">
+		<link rel="mask-icon" href="assets/favicon/safari-pinned-tab.svg">
+		<link rel="shortcut icon" href="assets/favicon/favicon.ico">
+		<meta name="msapplication-TileColor" content="#da532c">
+		<meta name="msapplication-config" content="assets/favicon/browserconfig.xml">
+		<meta name="theme-color" content="#ffffff">
+        
+        <!-- Bootstrap icons-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+        <!-- Google fonts-->
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,600;1,600&amp;display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Mulish:ital,wght@0,300;0,500;0,600;0,700;1,300;1,500;1,600;1,700&amp;display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,400;1,400&amp;display=swap" rel="stylesheet" />
+        <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/styles.css" rel="stylesheet" />
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-QS2EWC3Z20"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-QS2EWC3Z20');
+        </script>
+    </head>
+    <body id="page-top" style="background-color: #000;">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+            <div class="container px-5">
+                <a class="navbar-brand fw-bold" href="#page-top"><img class="px-1" src="assets/img/qcoin_logo.png"></a>
+				<button id="connectweb3" class="btn btn-dark rounded-pill px-3 mb-2 mb-lg-0">
+                    <span class="d-flex align-items-center">
+                    	<span id="connectweb3text" class="small">Connect</span>
+                	</span>
+                </button>
+    		</div>
+    	</nav>
+    
+        <header class="masthead video-container" id="about">
+			<video autoplay muted loop id="vid">
+  				<source src="assets/img/hero_vid.webm" type="video/webm">
+			</video>        
+            <div class="container caption px-5">
+                <div class="row gx-5 align-items-center">
+                    <div class="col-lg-6">
+                        <!-- Mashead text and app badges-->
+                        <div class="mb-5 mb-lg-0 text-center text-lg-start">
+							<h1 class="display-1 lh-1 text-white mb-3">Trust the Plan. Fund the Plan.</h1>
+                            <p class="lead fw-normal text-muted mb-5">QCoin Presale is now Live.</p>			
+                            <div class="d-flex flex-column flex-lg-row align-items-center">
+                            </div>
+                        </div>						
+                    </div>					
+                </div>
+            </div>
+        </header>
+        
+		<section id="presale" class="py-0">
+        <aside class="text-center bg-gradient-primary-to-secondary">
+            <div class="container px-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="h2 fs-1 text-white mb-4">Spend how much BNB?</div>
+						<div class="lead fw-normal text-muted mb-4">
+							<form class="bg-dark p-4">
+								<div class="input-group mb-4">
+  									<input type="number" class="form-control" placeholder="1" aria-label="BNB" aria-describedby="bnb">
+  									<span class="input-group-text" id="bnb">BNB</span>
+  									<button class="btn btn-outline-light" type="button" id="max-button">MAX</button>
+								</div>
+								<div class="btn-group">
+									<button class="btn btn-outline-light m-1 rounded-pill" type="button" id="button-25">25%</button>
+									<button class="btn btn-outline-light m-1 rounded-pill" type="button" id="button-50">50%</button>
+									<button class="btn btn-outline-light m-1 rounded-pill" type="button" id="button-75">75%</button>
+									<button class="btn btn-outline-light m-1 rounded-pill" type="button" id="button-100">100%</button>
+								</div>
+								<hr/>
+								<div>
+									<div class="h4 fs-4 text-white mx-1">You Get</div>
+									<div class="h4 fs-4 text-white mb-4"><span id="getamount">####</span><span class="ms-1">QCoin</span></div>
+								</div>
+								<div class="text-muted small">
+									<p>Your tokens will be locked in the contract until the presale has concluded</p>
+								</div>
+								<div>
+									<button class="btn btn-outline-light py-3 px-4 m-2 rounded-pill" type="button" id="purchase-button">Purchase</button>
+								</div>
+							</form>							
+						</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        </section>
+ 
+         <aside class="text-center bg-dark py-1">
+            <div class="container px-5">
+                <div class="row gx-5 justify-content-center">
+                    <div class="col-xl-8 text-white">
+                        <div class="fw-bold fs-2 mt-4" id="totalSupply">1,000,000,000,000,000</div>
+						<div class="fs-4 mb-4">Total Supply</div>
+						<div class="fw-bold fs-2 mb-1" id="burnedTokens">223,000,000,000,000</div>
+						<div class="fs-4 mb-4">Burned Dev Tokens</div>
+                    </div>
+                </div>
+            </div>
+        </aside>       
+        
+        
+        <!-- Footer-->
+        <footer class="bg-black text-center py-5">
+            <div class="container px-5">
+                <div class="text-white-50">
+                    <div class="mb-2">&copy; QCoin 2021. All Rights Reserved.</div>
+                    <a href="https://twitter.com/QCoinFund/"><i class="bi bi-twitter"></i></a>
+                    <span class="mx-1">&middot;</span>
+                    <a href="https://t.me/QCoinFund"><i class="bi bi-telegram"></i></a>
+                    <span class="mx-1">&middot;</span>
+                    <!-- a href="#!"><i class="bi bi-facebook"></i></a>
+                    <span class="mx-1">&middot;</span-->
+                    <a href="https://reddit.com/r/QCoinFund/"><i class="bi bi-reddit"></i></a>
+					<span class="mx-1">&middot;</span>
+                    <a href="https://instagram.com/qcoinfund"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+        </footer>
+    
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- QAPP-->
+        <script src="js/qcoinapp.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+    </body>
+</html>
