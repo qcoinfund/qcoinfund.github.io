@@ -7,8 +7,14 @@ const tokenDecimals = 9;
 const BURNWALLET = "0x000000000000000000000000000000000000dead";
 
 let pancakeSwapURL = "https://pancakeswap.finance/"+TOKEN_CONTRACT_ADDR;
+let bscURL = "https://bscnscan.com/address/"+TOKEN_CONTRACT_ADDR;
+let chartURL = "https://poocoin.app/tokens/"+TOKEN_CONTRACT_ADDR;
+
 if (CHAIN_ID == 97)
+{
 	pancakeSwapURL = "https://pancake.kiemtienonline360.com/#/swap?outputCurrency="+TOKEN_CONTRACT_ADDR;
+	bscURL = "https://testnet.bscnscan.com/address/"+TOKEN_CONTRACT_ADDR;
+}
 
 const tokenImage = 'https://qcoin.finance/assets/img/qcoin_logo.png'; // should be 512x512 I believe.
 
@@ -22,7 +28,7 @@ async function startApp(selectedAddress)
 
 	if (selectedAddress != null)
 		setupAccount(selectedAddress);
-	
+
 	const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);
 	console.log("tokenContrct",tokenContract);
 	const decimals = await tokenContract.methods.decimals().call();
@@ -31,9 +37,9 @@ async function startApp(selectedAddress)
 	let burnBalanceHR = addDecimalPlace(burnBalance,decimals); // human readable.
 	console.log("Burn balance: " + burnBalance + " human Readable: " + burnBalanceHR);
 
-  const totalSupply = await tokenContract.methods.totalSupply().call();
-  let totalSupplyHR = addDecimalPlace(totalSupply,decimals);
-  updateTokenFigures(burnBalanceHR, totalSupplyHR);
+	const totalSupply = await tokenContract.methods.totalSupply().call();
+	let totalSupplyHR = addDecimalPlace(totalSupply,decimals);
+	updateTokenFigures(burnBalanceHR, totalSupplyHR);
 }
 
 function updateTokenFigures(burnBalance, totalSupply)
@@ -58,18 +64,33 @@ function updateStaticContent()
 {
   setupBuyButtons();
   populateContractAddress();
+  setupBlockScannerButton();
 }
 
 function setupBuyButtons()
 {
 	const pcsLink = document.getElementById("pancakeBuyButton");
-  const pcsLink2 = document.getElementById("pancakeBuyButton1");
+  	const pcsLink2 = document.getElementById("pancakeBuyButton1");
 
 	if (pcsLink)
 		pcsLink.href = pancakeSwapURL;
 
   if (pcsLink2)
 	  pcsLink2.href = pancakeSwapURL;
+}
+
+function setupBlockScannerButton()
+{
+	const bscButton = document.getElementById("bscbutton");
+	if (bscButton)
+		bscButton.href = bscURL;
+}
+
+function setupChartButton()
+{
+	const chartButton = document.getElementById("poobutton");
+	if (chartButton)
+		chartButton.href = chartURL;
 }
 
 function populateContractAddress()
