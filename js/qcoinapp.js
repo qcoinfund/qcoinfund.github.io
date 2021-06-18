@@ -47,15 +47,11 @@ function updateTokenFigures(burnBalance, totalSupply)
     totalSupplyArea.innerHTML = totalSupply+"";
 }
 
-//TODO: fix this method up.
-function addDecimalPlace(numberAsString,decimals)
+function addDecimalPlace(number,decimals)
 {
-	if (numberAsString == 0)
-		return 0;
-	const len = numberAsString.length;
-	const startPiece=numberAsString.substr(0,(len-decimals));
-	const endPiece=numberAsString.substring(len-decimals);
-	return startPiece+"."+endPiece;
+  let bigNum = new BigNumber(number);
+  let bigNumHR = bigNum.shiftedBy(parseInt(-decimals));
+  return bigNumHR;
 }
 
 function updateStaticContent()
