@@ -38,7 +38,19 @@
         </script>
     </head>
     <body id="page-top" style="background-color: #000;">
-        <header class="video-container" id="about">
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
+            <div class="container px-5">
+                <a class="navbar-brand fw-bold" href="#page-top"><img class="px-1" src="assets/img/qcoin_logo.png"></a>
+				<button id="connectweb3" class="btn btn-dark rounded-pill px-3 mb-2 mb-lg-0">
+                    <span class="d-flex align-items-center">
+                    	<span id="connectweb3text" class="small">Connect</span>
+                	</span>
+                </button>
+    		</div>
+    	</nav>
+    
+        <header class="masthead video-container" id="about">
 			<video autoplay muted loop id="vid">
   				<source src="assets/img/hero_vid.webm" type="video/webm">
 			</video>        
@@ -99,9 +111,9 @@
             <div class="container px-5">
                 <div class="row gx-5 justify-content-center">
                     <div class="col-xl-8 text-white">
-                        <div class="fw-bold fs-2 mt-4">1,000,000,000,000,000</div>
+                        <div class="fw-bold fs-2 mt-4" id="totalSupply">1,000,000,000,000,000</div>
 						<div class="fs-4 mb-4">Total Supply</div>
-						<div class="fw-bold fs-2 mb-1">223,000,000,000,000</div>
+						<div class="fw-bold fs-2 mb-1" id="burnedTokens">223,000,000,000,000</div>
 						<div class="fs-4 mb-4">Burned Dev Tokens</div>
                     </div>
                 </div>
@@ -129,9 +141,9 @@
     
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+		<!-- QAPP-->
+        <script src="js/qcoinapp.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
-		<script src="js/md5.min.js"></script>
-		<script src="js/password.js"></script>
     </body>
 </html>
