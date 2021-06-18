@@ -773,8 +773,7 @@ const TOKEN_CONTRACT_ABI = [
 async function startApp(selectedAddress)
 {
 	// do app stuff.
-	setupBuyButtons();
-  populateContractAddress();
+	updateStaticContent();
 
 	// check that they are on the network and display appropriate message.
 	checkNetwork();
@@ -800,6 +799,12 @@ function addDecimalPlace(numberAsString,decimals)
 	const startPiece=numberAsString.substr(0,(len-decimals));
 	const endPiece=numberAsString.substring(len-decimals);
 	return startPiece+"."+endPiece;
+}
+
+function updateStaticContent()
+{
+  setupBuyButtons();
+  populateContractAddress();
 }
 
 function setupBuyButtons()
@@ -941,9 +946,10 @@ window.addEventListener('load', function() {
 		{
 			startApp(null);
 		}
-
-	} else {
-		console.log("No web3.");
+	} 
+  else 
+  {
+		updateStaticContent();
 	}
 
 	if (window.ethereum)
