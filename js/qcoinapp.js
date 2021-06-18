@@ -774,6 +774,7 @@ async function startApp(selectedAddress)
 {
 	// do app stuff.
 	setupBuyButtons();
+  populateContractAddress();
 
 	// check that they are on the network and display appropriate message.
 	checkNetwork();
@@ -812,6 +813,14 @@ function setupBuyButtons()
   if (pcsLink2)
 	  pcsLink2.href = pancakeSwapURL;
 }
+
+function populateContractAddress()
+{
+  const contractAddress1 = document.getElementById("contractAddress");
+  if (contractAddress1)
+    contractAddress1.innerHTML = TOKEN_CONTRACT_ADDR;
+}
+
 
 function checkNetwork()
 {
