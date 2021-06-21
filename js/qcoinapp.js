@@ -65,6 +65,7 @@ function updateStaticContent()
   setupBuyButtons();
   populateContractAddress();
   setupBlockScannerButton();
+  setupChartButton();
 }
 
 function setupBuyButtons()
