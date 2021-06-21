@@ -7,13 +7,13 @@ const tokenDecimals = 9;
 const BURNWALLET = "0x000000000000000000000000000000000000dead";
 
 let pancakeSwapURL = "https://pancakeswap.finance/"+TOKEN_CONTRACT_ADDR;
-let bscURL = "https://bscnscan.com/address/"+TOKEN_CONTRACT_ADDR;
+let bscURL = "https://bscscan.com/address/"+TOKEN_CONTRACT_ADDR;
 let chartURL = "https://poocoin.app/tokens/"+TOKEN_CONTRACT_ADDR;
 
 if (CHAIN_ID == 97)
 {
 	pancakeSwapURL = "https://pancake.kiemtienonline360.com/#/swap?outputCurrency="+TOKEN_CONTRACT_ADDR;
-	bscURL = "https://testnet.bscnscan.com/address/"+TOKEN_CONTRACT_ADDR;
+	bscURL = "https://testnet.bscscan.com/address/"+TOKEN_CONTRACT_ADDR;
 }
 
 const tokenImage = 'https://qcoin.finance/assets/img/qcoin_logo.png'; // should be 512x512 I believe.
