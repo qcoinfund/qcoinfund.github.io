@@ -34,7 +34,6 @@ async function startApp(selectedAddress)
 
 	const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);
 	const decimals = await tokenContract.methods.decimals().call();
-	console.log("dec: " + decimals);
 	const burnBalance = await tokenContract.methods.balanceOf(BURNWALLET).call();
 	let burnBalanceHR = addDecimalPlace(burnBalance,decimals); // human readable.
 	const totalSupply = await tokenContract.methods.totalSupply().call();
@@ -227,6 +226,7 @@ async function connect() {
 }
 
 function setupAccount(account) {
+	console.log("setupAccount: "+ account);
 	const connectButton = document.getElementById('connectweb3');
 	connectButton.classList.add("btn-success");
 	connectButton.classList.remove("btn-dark");
@@ -241,6 +241,11 @@ let balanceHR = 0;
 
 async function setupPreSale(walletAddress)
 {
+	const presaleArea = document.getElementById("presale-connected");
+	const presaleNotConnectedArea = document.getElementById("presale-notconnected");
+	presaleArea.classList.remove("d-none");
+	presaleNotConnectedArea.classList.add("d-none");
+	
 	setupPurchaseButton();
 	//let balance = await tokenContract.methods.balanceOf(walletAddress).call();
 	let balance = await web3.eth.getBalance(walletAddress);
@@ -250,7 +255,6 @@ async function setupPreSale(walletAddress)
 	balanceBox.innerHTML = balanceHR+"";
 	//let balanceBN = new BigNumber(balance);
 	//let balanceBNHR = reserve0big.shiftedBy(parseInt(-decimals));
-	console.log("Balance is : " + balance + " balanceHR:" + balanceHR);
 	setupPresetButtons();
 
 	const inputBox = document.getElementById("purchase-amount");
@@ -277,25 +281,21 @@ function setupPresetButtons()
 
 function presetMax()
 {
-	console.log("preset max");
 	updateInputs(balanceHR-0.01);
 }
 
 function preset25PCT()
 {
-	console.log("preset 25%");
 	updateInputs(balanceHR*0.25);
 }
 
 function preset50PCT()
 {
-	console.log("preset 50%");
 	updateInputs(balanceHR*0.5);
 }
 
 function preset75PCT()
 {
-	console.log("preset 75%");		
 	updateInputs(balanceHR*0.75);
 }
 
@@ -321,10 +321,8 @@ function setupPurchaseButton()
 
 function buyPresale()
 {
-	console.log("buy presale..");
 	const inputBox = document.getElementById("purchase-amount");
 	let amount =inputBox.value;
-	console.log("amount: " + amount);
 
 	var res = buyTokens(amount).then(function(receipt) {
 		console.log(receipt);
@@ -336,21 +334,17 @@ function buyPresale()
 function updateGetBox(numBNB)
 {
 	let numTokens = PRESALE_RATE*numBNB;
-	console.log("num tokens: " + numTokens);
 	let getAmount = document.getElementById("getamount");
 	getAmount.innerHTML = numTokens;
 }
 
 function buyTokens(amount) {
-	console.log("BUYTokens");
 	const icoContract = new web3.eth.Contract(ICO_CONTRACT_ABI,ICO_CONTRACT_ADDR);
 
 	console.dir(icoContract.methods);
 
 	 // value in wei
 	let amtValue = web3.utils.toWei(amount+"");
-	console.log("amtValue : " + amtValue + " from: " + amount);
-	console.log("Sending transaction...");
 	return icoContract.methods.buyTokens().send({from:ethereum.selectedAddress, value: amtValue});
 }
 
@@ -363,6 +357,7 @@ function handleAccountsChanged()
 {
   console.log("need to handle account that just changed.");
 }
+
 const bscTokens = [ 
 	{ "id": "wbnb", "symbol": "wbnb","contract": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" }, 
 	{ "id": "binance-usd", "symbol": "busd", "contract": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"  }, 
@@ -461,7 +456,6 @@ async function getTokenPrice(prices) {
 
 		const reserve0 = reserves[0];
 		const reserve1 = reserves[1];
-		console.log("reserve0 is: " + reserve0 + " reserve1 is: " + reserve1);
 		
 		let decimals0 = 9;
 		let reserve0big = new BigNumber(reserve0);
@@ -469,7 +463,6 @@ async function getTokenPrice(prices) {
 		let decimals1 = 18;
 		let reserve1big = new BigNumber(reserve1);
 		let reserve1bigHR = reserve1big.shiftedBy(parseInt(-decimals1));
-		console.log("reserve0bigHR (Q) is: " + reserve0bigHR + " reserve1bigHR (BNB) is: " + reserve1bigHR);
 		//const rate = reserve1/reserve0;
 		const rate = reserve0bigHR.div(reserve1bigHR);
 		//const altRate = reserve0/reserve1; //dont know what this is
