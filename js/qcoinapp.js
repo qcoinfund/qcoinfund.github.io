@@ -46,8 +46,8 @@ async function startApp(selectedAddress)
 	let tokenPrice = await getTokenPrice(prices);
 	console.log("tokenPrice: " + tokenPrice);
 
-	//updateTokenPrice(tokenPrice);
-	//updateMarketCap(tokenPrice, totalSupplyHR);
+//	updateTokenPrice(tokenPrice);
+//	updateMarketCap(tokenPrice, totalSupplyHR);
 	//holders(tokenContract);
 }
 
@@ -79,11 +79,11 @@ function updateTokenFigures(burnBalance, totalSupply)
 {
   const burnArea = document.getElementById("burnedTokens");
   if (burnArea)
-    burnArea.innerHTML = burnBalance+"";
+    burnArea.innerHTML = new Intl.NumberFormat().format(burnBalance)+"";
   
   const totalSupplyArea = document.getElementById("totalSupply");
   if (totalSupplyArea)
-    totalSupplyArea.innerHTML = totalSupply+"";
+    totalSupplyArea.innerHTML = new Intl.NumberFormat().format(totalSupply)+"";
 }
 
 function addDecimalPlace(number,decimals)
