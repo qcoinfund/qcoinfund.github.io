@@ -46,8 +46,8 @@ async function startApp(selectedAddress)
 	let tokenPrice = await getTokenPrice(prices);
 	console.log("tokenPrice: " + tokenPrice);
 
-//	updateTokenPrice(tokenPrice);
-//	updateMarketCap(tokenPrice, totalSupplyHR);
+	updateTokenPrice(tokenPrice);
+	updateMarketCap(tokenPrice, totalSupplyHR);
 	//holders(tokenContract);
 }
 
@@ -64,7 +64,9 @@ function updateTokenPrice(tokenPrice)
 {
   const tokenPriceArea = document.getElementById("tokenPrice");
   if (tokenPriceArea)
-  	tokenPriceArea.innerHTML = "$"+tokenPrice;  
+  	tokenPriceArea.innerHTML = "$"+tokenPrice.toLocaleString(  undefined, // leave undefined to use the visitor's browser 
+             // locale or a string like 'en-US' to override it.
+  			{ minimumFractionDigits: 10 })+"";  
 }
 
 function updateMarketCap(tokenPrice, totalSupply)
@@ -72,7 +74,7 @@ function updateMarketCap(tokenPrice, totalSupply)
 	let marketCap = tokenPrice*totalSupply;
 	const marketCapArea = document.getElementById("marketCap");
 	if (marketCapArea)
-		marketCapArea.innerHTML = "$"+marketCap;  
+		marketCapArea.innerHTML = new Intl.NumberFormat('en-US',{ style: 'currency', currency: 'USD' }).format(marketCap);  
 }
 
 function updateTokenFigures(burnBalance, totalSupply)
@@ -338,16 +340,20 @@ async function getTokenPrice(prices) {
 
 		const reserve0 = reserves[0];
 		const reserve1 = reserves[1];
-
-		let decimals = 9;
-		let bigNum = new BigNumber(reserve0);
-		let bigNumHR = bigNum.shiftedBy(parseInt(-decimals));
-
+		console.log("reserve0 is: " + reserve0 + " reserve1 is: " + reserve1);
+		
+		let decimals0 = 9;
+		let reserve0big = new BigNumber(reserve0);
+		let reserve0bigHR = reserve0big.shiftedBy(parseInt(-decimals0));
+		let decimals1 = 18;
+		let reserve1big = new BigNumber(reserve1);
+		let reserve1bigHR = reserve1big.shiftedBy(parseInt(-decimals1));
+		console.log("reserve0bigHR (Q) is: " + reserve0bigHR + " reserve1bigHR (BNB) is: " + reserve1bigHR);
 		//const rate = reserve1/reserve0;
-		const rate = bigNumHR.div(reserve1);
-		const altRate = reserve0/reserve1;
-		console.log("Price rate: " + rate + " altRate: " + altRate + " token1Price: " + token1Price);
-		tokenPrice = rate.multipliedBy(token1Price);
+		const rate = reserve0bigHR.div(reserve1bigHR);
+		//const altRate = reserve0/reserve1; //dont know what this is
+		//console.log("Price rate: " + rate + " altRate: " + altRate + " token1Price: " + token1Price);
+		tokenPrice = token1Price / rate;
 		prices[TOKEN_CONTRACT_ADDR] = {usd: tokenPrice};
 	}
 	else if (token0Price > 0 && token1Price == 0)
