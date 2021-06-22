@@ -1,6 +1,8 @@
 const CHAIN_ID = 97; // TESTNET=97
 const TOKEN_CONTRACT_ADDR = '0x45EB209d2f758CF2Bc623578B0ADcb7e351eab77'; // TESTNET TOKEN CONTRACT
 const TOKEN_PRICE_LP = '0x6a34f03db48f6dfffad221edd5264123e875d97c'; // TESTNET LP
+const ICO_CONTRACT_ADDR = '0x608ae5b78c3170aab4c70c668790e6ea732b227b'; // TESTNET ICO
+const PRESALE_RATE = 1000000; // ICO rate for 1 BNB
 
 const tokenSymbol = 'Q';
 const tokenDecimals = 9;
@@ -30,7 +32,7 @@ async function startApp(selectedAddress)
 	if (selectedAddress != null)
 		setupAccount(selectedAddress);
 
-	const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);	
+	const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);
 	const decimals = await tokenContract.methods.decimals().call();
 	console.log("dec: " + decimals);
 	const burnBalance = await tokenContract.methods.balanceOf(BURNWALLET).call();
@@ -230,7 +232,126 @@ function setupAccount(account) {
 	connectButton.classList.remove("btn-dark");
 	const connectButtonText = document.getElementById("connectweb3text");
 	connectButtonText.innerText = account.substring(0,4).concat("...").concat(account.substring(account.length-4));
+
+	setupPreSale(account);
 	connected(account);
+}
+
+let balanceHR = 0;
+
+async function setupPreSale(walletAddress)
+{
+	setupPurchaseButton();
+	//let balance = await tokenContract.methods.balanceOf(walletAddress).call();
+	let balance = await web3.eth.getBalance(walletAddress);
+	balanceHR = web3.utils.fromWei(balance);
+
+	let balanceBox = document.getElementById("bnbbalance");
+	balanceBox.innerHTML = balanceHR+"";
+	//let balanceBN = new BigNumber(balance);
+	//let balanceBNHR = reserve0big.shiftedBy(parseInt(-decimals));
+	console.log("Balance is : " + balance + " balanceHR:" + balanceHR);
+	setupPresetButtons();
+
+	const inputBox = document.getElementById("purchase-amount");
+	inputBox.addEventListener('change', inputChanged);
+}
+
+function setupPresetButtons()
+{
+	const btnmax = document.getElementById('max-button');
+	btnmax.addEventListener('click',presetMax);
+
+	const btn25pct = document.getElementById('button-25');
+	btn25pct.addEventListener('click',preset25PCT);
+
+	const btn50pct = document.getElementById('button-50');
+	btn50pct.addEventListener('click',preset50PCT);
+
+	const btn75pct = document.getElementById('button-75');
+	btn75pct.addEventListener('click',preset75PCT);
+
+	const btn100pct = document.getElementById('button-100');
+	btn100pct.addEventListener('click',presetMax);
+}
+
+function presetMax()
+{
+	console.log("preset max");
+	updateInputs(balanceHR-0.01);
+}
+
+function preset25PCT()
+{
+	console.log("preset 25%");
+	updateInputs(balanceHR*0.25);
+}
+
+function preset50PCT()
+{
+	console.log("preset 50%");
+	updateInputs(balanceHR*0.5);
+}
+
+function preset75PCT()
+{
+	console.log("preset 75%");		
+	updateInputs(balanceHR*0.75);
+}
+
+function inputChanged()
+{
+	const inputBox = document.getElementById("purchase-amount");
+	let inputsBNB = inputBox.value;
+	updateGetBox(inputsBNB);
+}
+
+function updateInputs(bnb)
+{
+	updateGetBox(bnb);
+	const inputBox = document.getElementById("purchase-amount");
+	inputBox.value = bnb;
+}
+
+function setupPurchaseButton()
+{
+	const btn = document.getElementById('purchase-button');
+	btn.addEventListener('click',buyPresale);
+}
+
+function buyPresale()
+{
+	console.log("buy presale..");
+	const inputBox = document.getElementById("purchase-amount");
+	let amount =inputBox.value;
+	console.log("amount: " + amount);
+
+	var res = buyTokens(amount).then(function(receipt) {
+		console.log(receipt);
+		// Show receipt.
+		//toasty.show();
+	});
+}
+
+function updateGetBox(numBNB)
+{
+	let numTokens = PRESALE_RATE*numBNB;
+	console.log("num tokens: " + numTokens);
+	let getAmount = document.getElementById("getamount");
+	getAmount.innerHTML = numTokens;
+}
+
+function buyTokens(amount) {
+	console.log("BUYTokens");
+	const icoContract = new web3.eth.Contract(ICO_CONTRACT_ABI,ICO_CONTRACT_ADDR);
+
+	console.dir(icoContract.methods);
+
+	 // value in wei
+	let amtValue = web3.utils.toWei(amount+"");
+	console.log("amtValue : " + amtValue + " from: " + amount);
+	console.log("Sending transaction...");
+	return icoContract.methods.buyTokens().send({from:ethereum.selectedAddress, value: amtValue});
 }
 
 async function connected(account)
