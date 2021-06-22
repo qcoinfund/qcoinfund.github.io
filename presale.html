@@ -75,8 +75,12 @@
             <div class="container px-5">
                 <div class="row gx-5 justify-content-center">
                     <div class="col-lg-8">
-                        <div class="h2 fs-1 text-white mb-4">Spend how much BNB?</div>
-						<div class="lead fw-normal text-muted mb-4">
+                    	<div id="presale-notconnected">
+                    		<div class="h2 fs-1 text-white mb-4">Connect to Enter Presale</div>
+                    	</div>
+                    	<div id="presale" class="d-none">
+                        	<div class="h2 fs-1 text-white mb-4">Spend how much BNB?</div>
+							<div class="lead fw-normal text-muted mb-4">
 							<form class="bg-dark p-4">
 								<div class="h4 fs-5 text-white mb-4"><span class="me-1">Balance:</span><span id="bnbbalance">#</span><span class="ms-1">BNB</span></div>
 								<div class="input-group mb-4">
@@ -102,7 +106,8 @@
 									<button class="btn btn-outline-light py-3 px-4 m-2 rounded-pill" type="button" id="purchase-button">Purchase</button>
 								</div>
 							</form>							
-						</div>
+							</div>
+                    	</div>
                     </div>
                 </div>
             </div>
