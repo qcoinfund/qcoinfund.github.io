@@ -24,22 +24,55 @@ async function startApp(selectedAddress)
 	updateStaticContent();
 
 	// check that they are on the network and display appropriate message.
-	checkNetwork();
+	if (typeof ethereum !== 'undefined')
+		checkNetwork();
 
 	if (selectedAddress != null)
 		setupAccount(selectedAddress);
 
-	const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);
-	console.log("tokenContrct",tokenContract);
+	const tokenContract = new web3.eth.Contract(TOKEN_CONTRACT_ABI,TOKEN_CONTRACT_ADDR);	
 	const decimals = await tokenContract.methods.decimals().call();
-	console.log("Decimals is: " + decimals);
+	console.log("dec: " + decimals);
 	const burnBalance = await tokenContract.methods.balanceOf(BURNWALLET).call();
 	let burnBalanceHR = addDecimalPlace(burnBalance,decimals); // human readable.
-	console.log("Burn balance: " + burnBalance + " human Readable: " + burnBalanceHR);
-
 	const totalSupply = await tokenContract.methods.totalSupply().call();
 	let totalSupplyHR = addDecimalPlace(totalSupply,decimals);
 	updateTokenFigures(burnBalanceHR, totalSupplyHR);
+	const prices = await getBscPrices();
+
+	// for testnet.
+	prices["0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"] = prices["0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"];
+
+	let tokenPrice = await getTokenPrice(prices);
+	console.log("tokenPrice: " + tokenPrice);
+
+	//updateTokenPrice(tokenPrice);
+	//updateMarketCap(tokenPrice, totalSupplyHR);
+	//holders(tokenContract);
+}
+
+function holders(tokenContract)
+{
+	console.dir(tokenContract.events);
+	event_filter = tokenContract.events.Transfer.createFilter(fromBlock='latest', argument_filters={'arg1':10})
+	console.log("event_filter", event_filter);
+
+	tx_list = filtering.get(only_changes=False);
+	console.log("tx_list",tx_list);
+}
+function updateTokenPrice(tokenPrice)
+{
+  const tokenPriceArea = document.getElementById("tokenPrice");
+  if (tokenPriceArea)
+  	tokenPriceArea.innerHTML = "$"+tokenPrice;  
+}
+
+function updateMarketCap(tokenPrice, totalSupply)
+{
+	let marketCap = tokenPrice*totalSupply;
+	const marketCapArea = document.getElementById("marketCap");
+	if (marketCapArea)
+		marketCapArea.innerHTML = "$"+marketCap;  
 }
 
 function updateTokenFigures(burnBalance, totalSupply)
@@ -100,7 +133,6 @@ function populateContractAddress()
   if (contractAddress1)
     contractAddress1.innerHTML = TOKEN_CONTRACT_ADDR;
 }
-
 
 function checkNetwork()
 {
@@ -186,7 +218,7 @@ async function connect() {
 		setupAccount(account);
 	}
 	catch(err) {
-		console.log("Error with connecting to metamask.");
+		console.log("Error with connecting to metamask: " + err);
 	}
 }
 
@@ -208,9 +240,83 @@ function handleAccountsChanged()
 {
   console.log("need to handle account that just changed.");
 }
+const bscTokens = [ 
+	{ "id": "wbnb", "symbol": "wbnb","contract": "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c" }, 
+	{ "id": "binance-usd", "symbol": "busd", "contract": "0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56"  }, 
+	{ "id": "pancakeswap-token", "symbol": "CAKE", "contract": "0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82"  }, 
+	{ "id": "beefy-finance", "symbol": "BIFI", "contract": "0xca3f508b8e4dd382ee878a314789373d80a5190a" }, 
+	{ "id": "bdollar-share", "symbol": "sBDO", "contract": "0x0d9319565be7f53cefe84ad201be3f40feae2740"  }, 
+	{ "id": "belugaswap","symbol": "BELUGA", "contract": "0x181de8c57c4f25eba9fd27757bbd11cc66a55d31" }, 
+	{ "id": "chainlink","symbol": "LINK","contract":"0xf8a0bf9cf54bb92f17374d9e9a321e6a111a51bd" }, 
+	{ "id": "bscex","symbol": "BSCX", "contract": "0x5ac52ee5b2a633895292ff6d8a89bb9190451587" },
+	{ "id": "binance-eth","symbol": "BETH", "contract": "0x250632378e573c6be1ac2f97fcdf00515d0aa91b" },
+	{ "id": "tether","symbol": "USDT", "contract": "0x55d398326f99059fF775485246999027B3197955" },
+	{ "id": "bitcoin-bep2","symbol": "BTCB", "contract": "0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c" },
+	{ "id": "ethereum","symbol": "ETH", "contract": "0x2170Ed0880ac9A755fd29B2688956BD959F933F8" },
+	{ "id": "bakerytoken","symbol": "BAKE", "contract": "0xE02dF9e3e622DeBdD69fb838bB799E3F168902c5" },
+	{ "id": "goose-finance","symbol": "EGG", "contract": "0xf952fc3ca7325cc27d15885d37117676d25bfda6" },
+	{ "id": "dai","symbol": "DAI", "contract": "0x1af3f329e8be154074d8769d1ffa4ee058b1dbc3" },
+	{ "id": "auto","symbol": "AUTO", "contract": "0xa184088a740c695e156f91f5cc086a06bb78b827" },
+	{ "id": "wault-finance","symbol": "WAULT", "contract": "0x6ff2d9e5891a7a7c554b80e0d1b791483c78bce9" },
+	{ "id": "swipe","symbol": "SXP", "contract": "0x47BEAd2563dCBf3bF2c9407fEa4dC236fAbA485A" },
+	{ "id": "vai","symbol": "VAI", "contract": "0x4bd17003473389a42daf6a0a729f6fdb328bbbd7" },
+	{ "id": "venus","symbol": "XVS", "contract": "0xcF6BB5389c92Bdda8a3747Ddb454cB7a64626C63" },
+	{ "id": "terrausd", "symbol": "UST", "contract": "0x23396cf899ca06c4472205fc903bdb4de249d6fc"},
+	{ "id": "cardano", "symbol": "ADA", "contract": "0x3EE2200Efb3400fAbB9AacF31297cBdD1d435D47"},
+	{ "id": "bearn-fi", "symbol": "BFI", "contract": "0x81859801b01764d4f0fa5e64729f5a6c3b91435b"},
+	{ "id": "polkadot", "symbol": "DOT", "contract": "0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402"},
+	{ "id": "vbswap", "symbol": "VBSWAP", "contract": "0x4f0ed527e8a95ecaa132af214dfd41f30b361600"},
+	{ "id": "bdollar", "symbol": "BDO", "contract": "0x190b589cf9fb8ddeabbfeae36a813ffb2a702454"},
+	{ "id": "julswap", "symbol": "JULD", "contract": "0x5a41f637c3f7553dba6ddc2d3ca92641096577ea"},
+	{ "id": "the-famous-token", "symbol": "TFT", "contract": "0xA9d3fa202b4915c3eca496b0e7dB41567cFA031C"},
+	{ "id": "shield-protocol", "symbol": "SHIELD", "contract": "0x60b3bc37593853c04410c4f07fe4d6748245bf77"},
+	{ "id": "lead-token", "symbol": "LEAD", "contract": "0x2ed9e96EDd11A1fF5163599A66fb6f1C77FA9C66"},
+	{ "id": "sparkpoint", "symbol": "SRK", "contract": "0x3B1eC92288D78D421f97562f8D479e6fF7350a16"},
+	{ "id": "curate", "symbol": "XCUR", "contract": "0x708C671Aa997da536869B50B6C67FA0C32Ce80B2"},
+	{ "id": "uniswap", "symbol": "UNI", "contract": "0xBf5140A22578168FD562DCcF235E5D43A02ce9B1"},
+	{ "id": "tsuki-dao", "symbol": "TSUKI", "contract": "0x3fd9e7041c45622e8026199a46f763c9807f66f3"},
+	{ "id": "panda-yield", "symbol": "BBOO", "contract": "0xd909840613fcb0fadc6ee7e5ecf30cdef4281a68"},
+	{ "id": "cryptex", "symbol": "CRX", "contract": "0x97a30C692eCe9C317235d48287d23d358170FC40"},
+	{ "id": "polis", "symbol": "POLIS", "contract": "0xb5bea8a26d587cf665f2d78f077cca3c7f6341bd"},
+	{ "id": "tether", "symbol": "USDT", "contract": "0x049d68029688eAbF473097a2fC38ef61633A3C7A"},
+	{ "id": "swirl-cash", "symbol": "SWIRL", "contract": "0x52d86850bc8207b520340b7e39cdaf22561b9e56"},
+	{ "id": "squirrel-finance", "symbol": "NUTS", "contract": "0x8893D5fA71389673C5c4b9b3cb4EE1ba71207556"},
+	{ "id": "usd-coin", "symbol": "USDC", "contract": "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"},
+	{ "id": "iron-stablecoin", "symbol": "IRON", "contract": "0x7b65b489fe53fce1f6548db886c08ad73111ddd8" },
+	{ "id": "midas-dollar", "symbol": "MDO", "contract": "0x35e869b7456462b81cdb5e6e42434bd27f3f788c" },
+	{ "id": "slime-finance", "symbol": "SLME", "contract": "0x4fcfa6cc8914ab455b5b33df916d90bfe70b6ab1" },
+	{ "id": "bolt-true-dollar", "symbol": "BTD", "contract": "0xd1102332a213e21faf78b69c03572031f3552c33" },
+	{ "id": "mdex", "symbol": "MDX", "contract": "0x9C65AB58d8d978DB963e63f2bfB7121627e3a739" },
+	{ "id": "ice-token", "symbol": "ICE", "contract": "0xf16e81dce15b08f326220742020379b855b87df9"},
+	{ "id": "alpaca-finance", "symbol": "ALPACA", "contract": "0x8f0528ce5ef7b51152a59745befdd91d97091d2f"},
+	{ "id": "blue-planetfinance", "symbol": "AQUA", "contract": "0x72B7D61E8fC8cF971960DD9cfA59B8C829D91991"},
+	{ "id": "dogecoin", "symbol": "DOGE", "contract": "0xbA2aE424d960c26247Dd6c32edC70B295c744C43"},
+	{ "id": "degen", "symbol": "DGNZ", "contract": "0xb68a67048596502A8B88f1C10ABFF4fA99dfEc71"},
+	{ "id": "degencomp", "symbol": "aDGNZ", "contract": "0xe8B9b396c59A6BC136cF1f05C4D1A68A0F7C2Dd7"},
+	{ "id": "gambit", "symbol": "GMT", "contract": "0x99e92123eb77bc8f999316f622e5222498438784"},
+	{ "id": "alien-worlds-bsc", "symbol": "TLM", "contract": "0x2222227e22102fe3322098e4cbfe18cfebd57c95"},
+	{ "id": "ten", "symbol": "TENFI", "contract": "0xd15c444f1199ae72795eba15e8c1db44e47abf62"}
+  ]
+  
+async function getBscPrices() {
+		const idPrices = await lookUpPrices(bscTokens.map(x => x.id));
+		const prices = {}
+		for (const bt of bscTokens)
+			if (idPrices[bt.id])
+				prices[bt.contract] = idPrices[bt.id];
+		return prices;
+}  
 
-async function getTokenPrice() {  
-	const lpContract = new web3.eth.Contract(poolABI,TOKEN_PRICE_LP);
+const lookUpPrices = async function(id_array) {
+	let ids = id_array.join('%2C')
+	const url = 'https://api.coingecko.com/api/v3/simple/price?ids=' + ids + '&vs_currencies=usd';
+	const res = await fetch(url);
+	const text = await res.text();
+	return JSON.parse(text);
+}
+
+async function getTokenPrice(prices) {  
+	const lpContract = new web3.eth.Contract(POOL_ABI,TOKEN_PRICE_LP);
 	token0 = await lpContract.methods.token0().call();
 	token1 = await lpContract.methods.token1().call();
 
@@ -218,19 +324,35 @@ async function getTokenPrice() {
 	var token1Price = 0;
 
 	if (prices[token0])
-		token0Price = prices[token0].usd; // E.g. MATIC->USDC
+		token0Price = prices[token0].usd;
 
 	if (prices[token1])
-		token1Price = prices[token1].usd; // E.g. 1 USDC worth of MATIC
+		token1Price = prices[token1].usd;
 
 	var tokenPrice = 0;
 
 	if (token0Price == 0 && token1Price > 0)
 	{
 		console.log("need token0 price..");
+		const reserves = await lpContract.methods.getReserves().call();
+
+		const reserve0 = reserves[0];
+		const reserve1 = reserves[1];
+
+		let decimals = 9;
+		let bigNum = new BigNumber(reserve0);
+		let bigNumHR = bigNum.shiftedBy(parseInt(-decimals));
+
+		//const rate = reserve1/reserve0;
+		const rate = bigNumHR.div(reserve1);
+		const altRate = reserve0/reserve1;
+		console.log("Price rate: " + rate + " altRate: " + altRate + " token1Price: " + token1Price);
+		tokenPrice = rate.multipliedBy(token1Price);
+		prices[TOKEN_CONTRACT_ADDR] = {usd: tokenPrice};
 	}
 	else if (token0Price > 0 && token1Price == 0)
 	{
+		console.log("need token1 price");
 		// need token1 price
 		const reserves = await lpContract.methods.getReserves().call();
 		const reserve0 = reserves[0];
@@ -258,9 +380,13 @@ window.addEventListener('load', function() {
 			startApp(null);
 		}
 	} 
-  else 
-  {
+	else 
+	{
+	  	console.log("no Web3");
+		web3 = new Web3(new Web3.providers.HttpProvider('https://data-seed-prebsc-1-s1.binance.org:8545/'));
+		//web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
 		updateStaticContent();
+		startApp(null);
 	}
 
 	if (window.ethereum)
