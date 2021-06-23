@@ -327,6 +327,8 @@ function updateInputs(bnb)
 	updateGetBox(bnb);
 	const inputBox = document.getElementById("purchase-amount");
 	inputBox.value = bnb;
+	const btn = document.getElementById('purchase-button');
+	btn.disabled = false;
 }
 
 function setupPurchaseButton()
