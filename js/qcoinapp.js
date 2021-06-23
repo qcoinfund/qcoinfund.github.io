@@ -310,8 +310,15 @@ function preset75PCT()
 
 function inputChanged()
 {
-	const inputBox = document.getElementById("purchase-amount");
+	const inputBox = document.getElementById("purchase-amount");	
 	let inputsBNB = inputBox.value;
+	
+	const purchaseButton = document.getElementById('purchase-button');
+	if (inputsBNB != null && inputsBNB != "" && inputsBNB > 0)
+		purchaseButton.disabled = false;
+	else
+		purchaseButton.disabled = true;
+
 	updateGetBox(inputsBNB);
 }
 
