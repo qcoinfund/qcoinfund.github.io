@@ -251,6 +251,9 @@ async function setupPreSale(walletAddress)
 	const presaleNotConnectedArea = document.getElementById("presale-notconnected");
 	presaleArea.classList.remove("d-none");
 	presaleNotConnectedArea.classList.add("d-none");
+
+	const btn = document.getElementById('purchase-button');
+	btn.disabled = true; // Disable by default.
 	
 	setupPurchaseButton();
 	//let balance = await tokenContract.methods.balanceOf(walletAddress).call();
