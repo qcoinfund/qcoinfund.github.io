@@ -1,6 +1,6 @@
 const CHAIN_ID = 97; // TESTNET=97
 const TOKEN_CONTRACT_ADDR = '0x1d76390a558713aAdF392350130CEE863C266fe3'; // TESTNET TOKEN CONTRACT
-const TOKEN_PRICE_LP = ''; // TESTNET LP
+const TOKEN_PRICE_LP = null; // TESTNET LP
 const ICO_CONTRACT_ADDR = '0xFbfb612FfFc5c3B04cbF203F44F8653228bcB9d0'; // TESTNET ICO
 const PRESALE_RATE = 1000000; // ICO rate for 1 BNB
 
@@ -39,16 +39,22 @@ async function startApp(selectedAddress)
 	const totalSupply = await tokenContract.methods.totalSupply().call();
 	let totalSupplyHR = addDecimalPlace(totalSupply,decimals);
 	updateTokenFigures(burnBalanceHR, totalSupplyHR);
-	const prices = await getBscPrices();
 
-	// for testnet.
-	prices["0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"] = prices["0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"];
+	if (TOKEN_PRICE_LP != null)
+	{
+		console.log("Fetching prices..");
+		const prices = await getBscPrices();
 
-	let tokenPrice = await getTokenPrice(prices);
-	console.log("tokenPrice: " + tokenPrice);
+		// for testnet.
+		prices["0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd"] = prices["0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"];
 
-	updateTokenPrice(tokenPrice);
-	updateMarketCap(tokenPrice, totalSupplyHR);
+		let tokenPrice = await getTokenPrice(prices);
+		console.log("tokenPrice: " + tokenPrice);
+
+		updateTokenPrice(tokenPrice);
+		updateMarketCap(tokenPrice, totalSupplyHR);
+	}
+	
 	//holders(tokenContract);
 }
 
@@ -319,16 +325,33 @@ function setupPurchaseButton()
 	btn.addEventListener('click',buyPresale);
 }
 
-function buyPresale()
+async function buyPresale()
 {
 	const inputBox = document.getElementById("purchase-amount");
 	let amount =inputBox.value;
+	
 
-	var res = buyTokens(amount).then(function(receipt) {
-		console.log(receipt);
-		// Show receipt.
-		//toasty.show();
-	});
+	const icoContract = new web3.eth.Contract(ICO_CONTRACT_ABI,ICO_CONTRACT_ADDR);
+
+	//console.dir(icoContract.methods);
+
+	 // value in wei
+	let amtValue = web3.utils.toWei(amount+"");
+	var res = null
+	makeButtonPurchasing();
+	try{
+		res = await icoContract.methods.buyTokens().send({from:ethereum.selectedAddress, value: amtValue}).once("receipt", function(receipt) {
+			console.log("receipt",receipt);
+			activatePurchaseButton();
+			const transId = receipt.transactionHash;
+			const presaleSuccessBox = document.getElementById("presale-success");
+			presaleSuccessBox.classList.remove("d-none");
+		});
+	}
+	catch(err) {		
+		console.log("Exception in buyTokens call: " + err);
+		activatePurchaseButton();
+	}
 }
 
 function updateGetBox(numBNB)
@@ -338,14 +361,20 @@ function updateGetBox(numBNB)
 	getAmount.innerHTML = numTokens;
 }
 
-function buyTokens(amount) {
-	const icoContract = new web3.eth.Contract(ICO_CONTRACT_ABI,ICO_CONTRACT_ADDR);
+function activatePurchaseButton()
+{
+	const spinner = document.getElementById("purchase-spinner");
+	spinner.classList.add("d-none");
+	const btn = document.getElementById('purchase-button');
+	btn.disabled = false;
+}
 
-	console.dir(icoContract.methods);
-
-	 // value in wei
-	let amtValue = web3.utils.toWei(amount+"");
-	return icoContract.methods.buyTokens().send({from:ethereum.selectedAddress, value: amtValue});
+function makeButtonPurchasing()
+{
+	const spinner = document.getElementById("purchase-spinner");
+	spinner.classList.remove("d-none");
+	const btn = document.getElementById('purchase-button');
+	btn.disabled = true;
 }
 
 async function connected(account)
