@@ -2,7 +2,7 @@
 const CHAIN_ID = 97; // TESTNET=97
 const TOKEN_CONTRACT_ADDR = '0x7583Ea0945d8738EbdeCe8e60ca02E9ab92AA205'; // TESTNET TOKEN CONTRACT
 const TOKEN_PRICE_LP = null; // TESTNET LP
-const ICO_CONTRACT_ADDR = '0x02c912cF601AA679B57b8039BE91D2D0Faeba94F'; // TESTNET ICO
+const ICO_CONTRACT_ADDR = '0x02c912cF601AA679B57b8039BE91D2D0Faeba94F'; // TESTNET ICO (made by 0xf99D982f3F8369DFF255F8657243f0975F3C558c)
 */
 
 
@@ -16,7 +16,7 @@ const tokenSymbol = 'Q';
 const tokenDecimals = 9;
 const BURNWALLET = "0x000000000000000000000000000000000000dead";
 
-let pancakeSwapURL = "https://pancakeswap.finance/"+TOKEN_CONTRACT_ADDR;
+let pancakeSwapURL = "https://pancakeswap.finance/#/swap?outputCurrency="+TOKEN_CONTRACT_ADDR;
 let bscURL = "https://bscscan.com/address/"+TOKEN_CONTRACT_ADDR;
 let chartURL = "https://poocoin.app/tokens/"+TOKEN_CONTRACT_ADDR;
 
