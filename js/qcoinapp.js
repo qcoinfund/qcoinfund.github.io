@@ -208,6 +208,10 @@ const connectButton = document.getElementById('connectweb3');
 if (connectButton)
 	connectButton.addEventListener('click', connect);
 
+const connectButton2 = document.getElementById('connectweb3-2');
+if (connectButton2)
+	connectButton2.addEventListener('click', connect);
+
 const addTokenButton = document.getElementById('addCustomToken');
 if (addTokenButton) {
   addTokenButton.addEventListener('click', () => {
@@ -241,14 +245,25 @@ async function connect() {
 
 function setupAccount(account) {
 	console.log("setupAccount: "+ account);
+
 	const connectButton = document.getElementById('connectweb3');
-	connectButton.classList.add("btn-success");
-	connectButton.classList.remove("btn-dark");
 	const connectButtonText = document.getElementById("connectweb3text");
-	connectButtonText.innerText = account.substring(0,4).concat("...").concat(account.substring(account.length-4));
+	updateConnectButton(connectButton,connectButtonText,account);
+
+	const connectButton2 = document.getElementById('connectweb3-2');
+	const connectButton2Text = document.getElementById("connectweb3text-2");
+	if (connectButton2 && connectButton2Text)
+		updateConnectButton(connectButton2,connectButton2Text,account);
 
 	setupPreSale(account);
 	connected(account);
+}
+
+function updateConnectButton(btn, btnText, account)
+{
+	btn.classList.add("btn-success");
+	btn.classList.remove("btn-dark");
+	btnText.innerText = account.substring(0,4).concat("...").concat(account.substring(account.length-4));
 }
 
 let balanceHR = 0;
