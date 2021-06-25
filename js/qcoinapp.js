@@ -393,7 +393,7 @@ function updateGetBox(numBNB)
 {
 	let numTokens = PRESALE_RATE*numBNB;
 	let getAmount = document.getElementById("getamount");
-	getAmount.innerHTML = numTokens;
+	getAmount.innerHTML = new Intl.NumberFormat().format(numTokens)+"";
 }
 
 function activatePurchaseButton()
