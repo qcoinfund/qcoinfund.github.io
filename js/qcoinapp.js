@@ -16,7 +16,7 @@ const tokenSymbol = 'Q';
 const tokenDecimals = 9;
 const BURNWALLET = "0x000000000000000000000000000000000000dead";
 
-let pancakeSwapURL = "https://pancakeswap.finance/#/swap?outputCurrency="+TOKEN_CONTRACT_ADDR;
+let pancakeSwapURL = "https://exchange.pancakeswap.finance/#/swap?outputCurrency="+TOKEN_CONTRACT_ADDR;
 let bscURL = "https://bscscan.com/address/"+TOKEN_CONTRACT_ADDR;
 let chartURL = "https://poocoin.app/tokens/"+TOKEN_CONTRACT_ADDR;
 
