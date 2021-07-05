@@ -255,7 +255,7 @@ function setupAccount(account) {
 	if (connectButton2 && connectButton2Text)
 		updateConnectButton(connectButton2,connectButton2Text,account);
 
-	setupPreSale(account);
+	//setupPreSale(account);
 	connected(account);
 }
 
@@ -271,6 +271,11 @@ let balanceHR = 0;
 async function setupPreSale(walletAddress)
 {
 	const presaleArea = document.getElementById("presale-connected");
+	if (!presaleArea)
+	{
+		console.log("No presale area found.");
+		return;
+	}
 	const presaleNotConnectedArea = document.getElementById("presale-notconnected");
 	presaleArea.classList.remove("d-none");
 	presaleNotConnectedArea.classList.add("d-none");
