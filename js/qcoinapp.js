@@ -574,7 +574,8 @@ window.addEventListener('load', function() {
 	else 
 	{
 	  	console.log("no Web3");
-		web3 = new Web3(new Web3.providers.HttpProvider('https://data-seed-prebsc-1-s1.binance.org:8545/'));
+		web3 = new Web3(new Web3.providers.HttpProvider('https://bsc-dataseed.binance.org/'));
+		//web3 = new Web3(new Web3.providers.HttpProvider('https://data-seed-prebsc-1-s1.binance.org:8545/'));
 		//web3 = new Web3('https://data-seed-prebsc-1-s1.binance.org:8545/');
 		updateStaticContent();
 		startApp(null);
