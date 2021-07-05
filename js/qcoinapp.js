@@ -8,7 +8,7 @@ const ICO_CONTRACT_ADDR = '0x02c912cF601AA679B57b8039BE91D2D0Faeba94F'; // TESTN
 
 const CHAIN_ID = 56; // MAINNET
 const TOKEN_CONTRACT_ADDR = '0x72631bE04a6EFB2959DB8a4CC396490547c6A790'; // MAINNET TOKEN CONTRACT
-const TOKEN_PRICE_LP = null; // MAINNET LP
+const TOKEN_PRICE_LP = '0xeb25eced383e760102d5306d1a9f72271debfca9'; // MAINNET LP
 const ICO_CONTRACT_ADDR = '0x47Db8b023FdAC504B762a4EE3752fAea7f78cC65'; // MAINNET ICO NEW TOKENOMICS
 const PRESALE_RATE = 100000000000; // ICO rate for 1 BNB
 
@@ -78,6 +78,8 @@ function holders(tokenContract)
 function updateTokenPrice(tokenPrice)
 {
   const tokenPriceArea = document.getElementById("tokenPrice");
+  //console.log("tokenPriceArea is : " + tokenPriceArea + " tokenPrice is: " + tokenPrice);
+
   if (tokenPriceArea)
   	tokenPriceArea.innerHTML = "$"+tokenPrice.toLocaleString(  undefined, // leave undefined to use the visitor's browser 
              // locale or a string like 'en-US' to override it.
